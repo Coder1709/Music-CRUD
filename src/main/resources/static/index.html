@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎵 Music Streaming App - Testing Interface</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            min-height: 600px;
+        }
+
+        .sidebar {
+            background: #f8f9fa;
+            border-right: 1px solid #e0e0e0;
+            padding: 20px;
+        }
+
+        .nav-item {
+            padding: 15px 20px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-item:hover {
+            transform: translateX(5px);
+            border-color: #667eea;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .content {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: 800px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+        }
+
+        .card h3 {
+            color: #764ba2;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%);
+            color: white;
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+            color: white;
+        }
+
+        .response-box {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .response-box.success {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .response-box.error {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .status-badge.logged-in {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-badge.logged-out {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .token-display {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 0.85em;
+            word-break: break-all;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .song-item, .playlist-item {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            transition: all 0.3s;
+        }
+
+        .song-item:hover, .playlist-item:hover {
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .song-item h4, .playlist-item h4 {
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .playback-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .playback-status {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .loader {
+            display: none;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .credentials-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .credentials-box h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .credentials-box p {
+            margin: 5px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: 1px solid #e0e0e0;
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎵 Music Streaming App</h1>
+            <p>Complete API Testing Interface</p>
+            <div style="margin-top: 15px;">
+                <span>Auth Status:</span>
+                <span id="authStatus" class="status-badge logged-out">Not Logged In</span>
+                <span id="userInfo" style="margin-left: 10px; font-size: 0.9em;"></span>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="sidebar">
+                <div class="nav-item active" onclick="showSection('auth')">
+                    🔐 Authentication
+                </div>
+                <div class="nav-item" onclick="showSection('songs')">
+                    🎵 Song Management
+                </div>
+                <div class="nav-item" onclick="showSection('playlists')">
+                    📋 Playlists
+                </div>
+                <div class="nav-item" onclick="showSection('playback')">
+                    ▶️ Playback Control
+                </div>
+                <div class="nav-item" onclick="showSection('admin')">
+                    👑 Admin Operations
+                </div>
+                <div class="nav-item" onclick="showSection('info')">
+                    ℹ️ Information
+                </div>
+            </div>
+
+            <div class="content">
+                <!-- Authentication Section -->
+                <div id="auth" class="section active">
+                    <h2>🔐 Authentication</h2>
+
+                    <div class="credentials-box">
+                        <h4>Default Credentials:</h4>
+                        <p><strong>Admin:</strong> admin / admin123</p>
+                        <p><strong>User:</strong> user / user123</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Login</h3>
+                        <div class="form-group">
+                            <label>Username:</label>
+                            <input type="text" id="loginUsername" placeholder="Enter username" value="user">
+                        </div>
+                        <div class="form-group">
+                            <label>Password:</label>
+                            <input type="password" id="loginPassword" placeholder="Enter password" value="user123">
+                        </div>
+                        <button class="btn btn-primary" onclick="login()">Login</button>
+                        <button class="btn btn-danger" onclick="logout()">Logout</button>
+                        <div id="loginResponse" class="response-box" style="display: none;"></div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Register New User</h3>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Username:</label>
+                                <input type="text" id="regUsername" placeholder="Enter username">
+                            </div>
+                            <div class="form-group">
+                                <label>Email:</label>
+                                <input type="email" id="regEmail" placeholder="Enter email">
+                            </div>
+                            <div class="form-group">
+                                <label>First Name:</label>
+                                <input type="text" id="regFirstName" placeholder="Enter first name">
+                            </div>
+                            <div class="form-group">
+                                <label>Last Name:</label>
+                                <input type="text" id="regLastName" placeholder="Enter last name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Password:</label>
+                            <input type="password" id="regPassword" placeholder="Enter password">
+                        </div>
+                        <button class="btn btn-success" onclick="register()">Register</button>
+                        <div id="registerResponse" class="response-box" style="display: none;"></div>
+                    </div>
+
+                    <div class="card">
+                        <h3>User Profile</h3>
+                        <button class="btn btn-info" onclick="getProfile()">Get My Profile</button>
+                        <div id="profileResponse" class="response-box" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <!-- Songs Section -->
+                <div id="songs" class="section">
+                    <h2>🎵 Song Management</h2>
+
+                    <div class="card">
+                        <h3>Browse Songs</h3>
+                        <button class="btn btn-primary" onclick="getAllSongs()">Get All Songs</button>
+                        <div id="songsResponse" class="response-box" style="display: none;"></div>
+                        <div id="songsList"></div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Search Songs</h3>
+                        <div class="form-group">
+                            <label>Search Query:</label>
+                            <input type="text" id="searchQuery" placeholder="Search by title, artist, or album">
+                        </div>
+                        <button class="btn btn-info" onclick="searchSongs()">Search</button>
+                        <div id="searchResponse" class="response-box" style="display: none;"></div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Filter by Genre</h3>
+                        <div class="form-group">
+                            <label>Genre:</label>
+                            <select id="genreFilter">
+                                <option value="ROCK">Rock</option>
+                                <option value="POP">Pop</option>
+                                <option value="JAZZ">Jazz</option>
+                                <option value="CLASSICAL">Classical</option>
+                                <option value="HIP_HOP">Hip Hop</option>
+                                <option value="ELECTRONIC">Electronic</option>
+                                <option value="RNB">R&B</option>
+                                <option value="COUNTRY">Country</option>
+                                <option value="INDIE">Indie</option>
+                                <option value="OTHER">Other</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-info" onclick="getSongsByGenre()">Filter</button>
+                        <div id="genreResponse" class="response-box" style="display: none;"></div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Get Song by ID</h3>
+                        <div class="form-group">
+                            <label>Song ID:</label>
+                            <input type="number" id="getSongId" placeholder="Enter song ID" value="1">
+                        </div>
+                        <button class="btn btn-info" onclick="getSongById()">Get Song</button>
+                        <div id="getSongResponse" class="response-box" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <!-- Playlists Section -->
+                <div id="playlists" class="section">
+                    <h2>📋 Playlist Management</h2>
+
+                    <div class="card">
+                        <h3>Create Playlist</h3>
+                        <div class="form-group">
+                            <label>Playlist Name:</label>
+                            <input type="text" id="playlistName" placeholder="Enter playlist name">
+                        </div>
+                        <div class="form-group">
+                            <label>Description:</label>
+                            <textarea id="playlistDescription" rows="3" placeholder="Enter description"></textarea>
+                        </div>
+                        <button class="btn btn-success" onclick="createPlaylist()">Create Playlist</button>
+                        <div id="createPlaylistResponse" class="response-box" style="display: none;"></div>
+                    </div>
+
+                    <div class="card">
+                        <h3>My Playlists</h3>
+                        <button class="btn btn-primary" onclick="getMyPlaylists()">Load My Playlists</button>
+                        <div id="playlistsResponse" class="response-box" style="display: none;"></div>
+                        <div id="playlistsList"></div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Manage Playlist Songs</h3>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Playlist ID:</label>
+                                <input type="number" id="managePlaylistId" placeholder="Enter playlist ID">
+                            </div>
+                            <div class="form-group">
+                                <label>Song ID:</label>
+                                <input type="number" id="manageSongId" placeholder="Enter song ID">
+                            </div>
+                        </div>
+                        <button class="btn btn-success" onclick="addSongToPlaylist()">Add Song</button>
+                        <button class="btn btn-danger" onclick="removeSongFromPlaylist()">Remove Song</button>
+                        <div id="managePlaylistResponse" class="response-box" style="display: none;"></div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Get Playlist Details</h3>
+                        <div class="form-group">
+                            <label>Playlist ID:</label>
+                            <input type="number" id="getPlaylistId" placeholder="Enter playlist ID">
+                        </div>
+                        <button class="btn btn-info" onclick="getPlaylistById()">Get Playlist</button>
+                        <div id="getPlaylistResponse" class="response-box" style="display: none;"></div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Delete Playlist</h3>
+                        <div class="form-group">
+                            <label>Playlist ID:</label>
+                            <input type="number" id="deletePlaylistId" placeholder="Enter playlist ID">
+                        </div>
+                        <button class="btn btn-danger" onclick="deletePlaylist()">Delete Playlist</button>
+                        <div id="deletePlaylistResponse" class="response-box" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <!-- Playback Section -->
+                <div id="playback" class="section">
+                    <h2>▶️ Playback Control</h2>
+
+                    <!-- Audio Player -->
+                    <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                        <h3 style="color: white;">🎵 Now Playing</h3>
+                        <div id="nowPlayingInfo" style="margin: 15px 0; min-height: 60px;">
+                            <p style="font-size: 1.2em; font-weight: bold;" id="nowPlayingTitle">No song playing</p>
+                            <p style="opacity: 0.9;" id="nowPlayingArtist">Select a song to play</p>
+                        </div>
+                        <audio id="audioPlayer" controls style="width: 100%; margin-top: 10px;">
+                            Your browser does not support the audio element.
+                        </audio>
+                        <div id="coverImageContainer" style="margin-top: 15px; text-align: center;">
+                            <img id="coverImage" src="" alt="Cover" style="max-width: 200px; max-height: 200px; border-radius: 10px; display: none;">
+                        </div>
+                    </div>
+
+                    <div class="playback-status">
+                        <h3 style="color: white; margin-bottom: 15px;">Current Playback Status</h3>
+                        <div id="currentPlayback">Click "Get Current Status" to see playback information</div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Playback Controls</h3>
+                        <div class="form-group">
+                            <label>Song ID to Play:</label>
+                            <input type="number" id="playSongId" placeholder="Enter song ID" value="1">
+                        </div>
+                        <div class="playback-controls">
+                            <button class="btn btn-success" onclick="playSong()">▶️ Play Song</button>
+                            <button class="btn btn-warning" onclick="pausePlayback()">⏸️ Pause</button>
+                            <button class="btn btn-info" onclick="resumePlayback()">▶️ Resume</button>
+                            <button class="btn btn-danger" onclick="stopPlayback()">⏹️ Stop</button>
+                            <button class="btn btn-primary" onclick="getCurrentPlayback()">🔄 Get Current Status</button>
+                        </div>
+                        <div id="playbackResponse" class="response-box" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <!-- Admin Section -->
+                <div id="admin" class="section">
+                    <h2>👑 Admin Operations</h2>
+
+                    <div class="info-box">
+                        <strong>⚠️ Admin Access Required:</strong> You must be logged in as an admin to perform these operations.
+                    </div>
+
+                    <div class="card">
+                        <h3>🎵 Upload New Song with Files</h3>
+                        <div class="info-box" style="background: #d1ecf1; border-left: 4px solid #0c5460;">
+                            <strong>📁 File Upload:</strong> Upload actual audio files (MP3, WAV) and cover images (JPG, PNG). Max size: 50MB
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Title:</label>
+                                <input type="text" id="uploadSongTitle" placeholder="Song title">
+                            </div>
+                            <div class="form-group">
+                                <label>Artist:</label>
+                                <input type="text" id="uploadSongArtist" placeholder="Artist name">
+                            </div>
+                            <div class="form-group">
+                                <label>Album:</label>
+                                <input type="text" id="uploadSongAlbum" placeholder="Album name">
+                            </div>
+                            <div class="form-group">
+                                <label>Genre:</label>
+                                <select id="uploadSongGenre">
+                                    <option value="ROCK">Rock</option>
+                                    <option value="POP">Pop</option>
+                                    <option value="JAZZ">Jazz</option>
+                                    <option value="CLASSICAL">Classical</option>
+                                    <option value="HIP_HOP">Hip Hop</option>
+                                    <option value="ELECTRONIC">Electronic</option>
+                                    <option value="RNB">R&B</option>
+                                    <option value="COUNTRY">Country</option>
+                                    <option value="INDIE">Indie</option>
+                                    <option value="OTHER">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Duration (seconds):</label>
+                                <input type="number" id="uploadSongDuration" placeholder="Duration in seconds" value="180">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>🎵 Audio File: <span style="color: red;">*</span></label>
+                            <input type="file" id="uploadAudioFile" accept="audio/*" style="padding: 8px;">
+                            <small style="color: #666;">Supported formats: MP3, WAV, OGG, FLAC</small>
+                        </div>
+                        <div class="form-group">
+                            <label>🖼️ Cover Image: <span style="color: #666;">(Optional)</span></label>
+                            <input type="file" id="uploadCoverImage" accept="image/*" style="padding: 8px;">
+                            <small style="color: #666;">Supported formats: JPG, PNG, GIF</small>
+                        </div>
+                        <button class="btn btn-success" onclick="uploadSong()">📤 Upload Song</button>
+                        <div id="uploadSongResponse" class="response-box" style="display: none;"></div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Add New Song (Manual Path Entry)</h3>
+                        <div class="info-box">
+                            <strong>ℹ️ Note:</strong> Use this if you want to manually specify file paths instead of uploading files.
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Title:</label>
+                                <input type="text" id="adminSongTitle" placeholder="Song title">
+                            </div>
+                            <div class="form-group">
+                                <label>Artist:</label>
+                                <input type="text" id="adminSongArtist" placeholder="Artist name">
+                            </div>
+                            <div class="form-group">
+                                <label>Album:</label>
+                                <input type="text" id="adminSongAlbum" placeholder="Album name">
+                            </div>
+                            <div class="form-group">
+                                <label>Genre:</label>
+                                <select id="adminSongGenre">
+                                    <option value="ROCK">Rock</option>
+                                    <option value="POP">Pop</option>
+                                    <option value="JAZZ">Jazz</option>
+                                    <option value="CLASSICAL">Classical</option>
+                                    <option value="HIP_HOP">Hip Hop</option>
+                                    <option value="ELECTRONIC">Electronic</option>
+                                    <option value="RNB">R&B</option>
+                                    <option value="COUNTRY">Country</option>
+                                    <option value="INDIE">Indie</option>
+                                    <option value="OTHER">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Duration (seconds):</label>
+                                <input type="number" id="adminSongDuration" placeholder="Duration in seconds" value="180">
+                            </div>
+                            <div class="form-group">
+                                <label>File Path:</label>
+                                <input type="text" id="adminSongFilePath" placeholder="/songs/song.mp3">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Cover Image Path:</label>
+                            <input type="text" id="adminSongCoverImage" placeholder="/covers/cover.jpg">
+                        </div>
+                        <button class="btn btn-success" onclick="addSong()">Add Song</button>
+                        <div id="addSongResponse" class="response-box" style="display: none;"></div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Update Song</h3>
+                        <div class="form-group">
+                            <label>Song ID to Update:</label>
+                            <input type="number" id="updateSongId" placeholder="Enter song ID">
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Title:</label>
+                                <input type="text" id="updateSongTitle" placeholder="New title">
+                            </div>
+                            <div class="form-group">
+                                <label>Artist:</label>
+                                <input type="text" id="updateSongArtist" placeholder="New artist">
+                            </div>
+                        </div>
+                        <button class="btn btn-warning" onclick="updateSong()">Update Song</button>
+                        <div id="updateSongResponse" class="response-box" style="display: none;"></div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Delete Song</h3>
+                        <div class="form-group">
+                            <label>Song ID to Delete:</label>
+                            <input type="number" id="deleteSongId" placeholder="Enter song ID">
+                        </div>
+                        <button class="btn btn-danger" onclick="deleteSong()">Delete Song</button>
+                        <div id="deleteSongResponse" class="response-box" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <!-- Information Section -->
+                <div id="info" class="section">
+                    <h2>ℹ️ Application Information</h2>
+
+                    <div class="card">
+                        <h3>API Endpoints</h3>
+                        <p><strong>Base URL:</strong> http://localhost:8080/api</p>
+                        <h4 style="margin-top: 20px; color: #667eea;">Authentication:</h4>
+                        <ul style="line-height: 2;">
+                            <li>POST /auth/register - Register new user</li>
+                            <li>POST /auth/login - Login</li>
+                            <li>GET /auth/profile - Get user profile</li>
+                        </ul>
+                        <h4 style="margin-top: 20px; color: #667eea;">Songs:</h4>
+                        <ul style="line-height: 2;">
+                            <li>GET /songs - Get all songs</li>
+                            <li>GET /songs/{id} - Get song by ID</li>
+                            <li>GET /songs/search?q={query} - Search songs</li>
+                            <li>GET /songs/genre/{genre} - Get songs by genre</li>
+                            <li>POST /songs/admin/upload - Upload song with files (admin only)</li>
+                            <li>POST /songs/admin - Add song with paths (admin only)</li>
+                            <li>PUT /songs/admin/{id} - Update song (admin only)</li>
+                            <li>DELETE /songs/admin/{id} - Delete song (admin only)</li>
+                        </ul>
+                        <h4 style="margin-top: 20px; color: #667eea;">Playlists:</h4>
+                        <ul style="line-height: 2;">
+                            <li>POST /playlists - Create playlist</li>
+                            <li>GET /playlists - Get user's playlists</li>
+                            <li>GET /playlists/{id} - Get playlist by ID</li>
+                            <li>POST /playlists/{id}/songs/{songId} - Add song to playlist</li>
+                            <li>DELETE /playlists/{id}/songs/{songId} - Remove song from playlist</li>
+                            <li>DELETE /playlists/{id} - Delete playlist</li>
+                        </ul>
+                        <h4 style="margin-top: 20px; color: #667eea;">Playback:</h4>
+                        <ul style="line-height: 2;">
+                            <li>POST /playback/play/{songId} - Play song</li>
+                            <li>POST /playback/pause - Pause playback</li>
+                            <li>POST /playback/resume - Resume playback</li>
+                            <li>POST /playback/stop - Stop playback</li>
+                            <li>GET /playback/current - Get current playback status</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>Technologies Used</h3>
+                        <ul style="line-height: 2;">
+                            <li>☕ Java 17 with Spring Boot 3.5.7</li>
+                            <li>🗄️ PostgreSQL (Production) / H2 (Development)</li>
+                            <li>🔐 Spring Security with JWT Authentication</li>
+                            <li>📝 Log4j2 for Logging</li>
+                            <li>🏗️ JPA/Hibernate for ORM</li>
+                            <li>📦 Maven for Build Management</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>Features</h3>
+                        <ul style="line-height: 2;">
+                            <li>✅ User Registration & Authentication</li>
+                            <li>✅ JWT-based Security</li>
+                            <li>✅ Role-based Access Control (Admin/User)</li>
+                            <li>✅ Song Management with Search & Filters</li>
+                            <li>✅ Playlist Creation & Management</li>
+                            <li>✅ Playback Simulation with State Tracking</li>
+                            <li>✅ Global Exception Handling</li>
+                            <li>✅ Comprehensive Logging with Log4j2</li>
+                            <li>✅ SOLID Principles Implementation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="loader" id="loader"></div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080/api';
+        let authToken = null;
+        let currentUser = null;
+
+        // Show/Hide sections
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Update auth status
+        function updateAuthStatus(loggedIn, user = null) {
+            const statusEl = document.getElementById('authStatus');
+            const userInfoEl = document.getElementById('userInfo');
+            
+            if (loggedIn) {
+                statusEl.textContent = 'Logged In';
+                statusEl.className = 'status-badge logged-in';
+                if (user) {
+                    userInfoEl.textContent = `as ${user.username} (${user.role})`;
+                }
+            } else {
+                statusEl.textContent = 'Not Logged In';
+                statusEl.className = 'status-badge logged-out';
+                userInfoEl.textContent = '';
+            }
+        }
+
+        // Show response
+        function showResponse(elementId, data, isError = false) {
+            const el = document.getElementById(elementId);
+            el.style.display = 'block';
+            el.className = 'response-box ' + (isError ? 'error' : 'success');
+            el.textContent = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+        }
+
+        // API call helper
+        async function apiCall(url, method = 'GET', body = null, requiresAuth = true) {
+            const options = {
+                method,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+
+            if (requiresAuth && authToken) {
+                options.headers['Authorization'] = `Bearer ${authToken}`;
+            }
+
+            if (body) {
+                options.body = JSON.stringify(body);
+            }
+
+            try {
+                const response = await fetch(API_BASE + url, options);
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw { status: response.status, data };
+                }
+                
+                return { success: true, data };
+            } catch (error) {
+                return { success: false, error: error.data || error.message };
+            }
+        }
+
+        // Authentication Functions
+        async function login() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const result = await apiCall('/auth/login', 'POST', { username, password }, false);
+            
+            if (result.success) {
+                authToken = result.data.token;
+                currentUser = { username: result.data.username, role: result.data.role };
+                updateAuthStatus(true, currentUser);
+                showResponse('loginResponse', result.data);
+            } else {
+                showResponse('loginResponse', result.error, true);
+            }
+        }
+
+        function logout() {
+            authToken = null;
+            currentUser = null;
+            updateAuthStatus(false);
+            showResponse('loginResponse', 'Logged out successfully');
+        }
+
+        async function register() {
+            const data = {
+                username: document.getElementById('regUsername').value,
+                email: document.getElementById('regEmail').value,
+                password: document.getElementById('regPassword').value,
+                firstName: document.getElementById('regFirstName').value,
+                lastName: document.getElementById('regLastName').value
+            };
+
+            const result = await apiCall('/auth/register', 'POST', data, false);
+            showResponse('registerResponse', result.success ? result.data : result.error, !result.success);
+        }
+
+        async function getProfile() {
+            const result = await apiCall('/auth/profile');
+            showResponse('profileResponse', result.success ? result.data : result.error, !result.success);
+        }
+
+        // Song Functions
+        async function getAllSongs() {
+            const result = await apiCall('/songs');
+            
+            if (result.success) {
+                showResponse('songsResponse', result.data);
+                displaySongs(result.data);
+            } else {
+                showResponse('songsResponse', result.error, true);
+            }
+        }
+
+        function displaySongs(songs) {
+            const container = document.getElementById('songsList');
+            container.innerHTML = '<h4 style="margin-top: 20px; color: #667eea;">Songs List:</h4>';
+            
+            songs.forEach(song => {
+                const div = document.createElement('div');
+                div.className = 'song-item';
+                div.innerHTML = `
+                    <h4>${song.title}</h4>
+                    <p><strong>Artist:</strong> ${song.artist}</p>
+                    <p><strong>Album:</strong> ${song.album || 'N/A'}</p>
+                    <p><strong>Genre:</strong> ${song.genre}</p>
+                    <p><strong>Duration:</strong> ${Math.floor(song.duration / 60)}:${(song.duration % 60).toString().padStart(2, '0')}</p>
+                    <p><strong>ID:</strong> ${song.id}</p>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        async function searchSongs() {
+            const query = document.getElementById('searchQuery').value;
+            const result = await apiCall(`/songs/search?q=${encodeURIComponent(query)}`);
+            showResponse('searchResponse', result.success ? result.data : result.error, !result.success);
+        }
+
+        async function getSongsByGenre() {
+            const genre = document.getElementById('genreFilter').value;
+            const result = await apiCall(`/songs/genre/${genre}`);
+            showResponse('genreResponse', result.success ? result.data : result.error, !result.success);
+        }
+
+        async function getSongById() {
+            const id = document.getElementById('getSongId').value;
+            const result = await apiCall(`/songs/${id}`);
+            showResponse('getSongResponse', result.success ? result.data : result.error, !result.success);
+        }
+
+        // Playlist Functions
+        async function createPlaylist() {
+            const data = {
+                name: document.getElementById('playlistName').value,
+                description: document.getElementById('playlistDescription').value
+            };
+
+            const result = await apiCall('/playlists', 'POST', data);
+            showResponse('createPlaylistResponse', result.success ? result.data : result.error, !result.success);
+        }
+
+        async function getMyPlaylists() {
+            const result = await apiCall('/playlists');
+            
+            if (result.success) {
+                showResponse('playlistsResponse', result.data);
+                displayPlaylists(result.data);
+            } else {
+                showResponse('playlistsResponse', result.error, true);
+            }
+        }
+
+        function displayPlaylists(playlists) {
+            const container = document.getElementById('playlistsList');
+            container.innerHTML = '<h4 style="margin-top: 20px; color: #667eea;">My Playlists:</h4>';
+            
+            playlists.forEach(playlist => {
+                const div = document.createElement('div');
+                div.className = 'playlist-item';
+                div.innerHTML = `
+                    <h4>${playlist.name}</h4>
+                    <p><strong>Description:</strong> ${playlist.description || 'No description'}</p>
+                    <p><strong>Songs:</strong> ${playlist.songCount}</p>
+                    <p><strong>ID:</strong> ${playlist.id}</p>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        async function addSongToPlaylist() {
+            const playlistId = document.getElementById('managePlaylistId').value;
+            const songId = document.getElementById('manageSongId').value;
+            
+            const result = await apiCall(`/playlists/${playlistId}/songs/${songId}`, 'POST');
+            showResponse('managePlaylistResponse', result.success ? result.data : result.error, !result.success);
+        }
+
+        async function removeSongFromPlaylist() {
+            const playlistId = document.getElementById('managePlaylistId').value;
+            const songId = document.getElementById('manageSongId').value;
+            
+            const result = await apiCall(`/playlists/${playlistId}/songs/${songId}`, 'DELETE');
+            showResponse('managePlaylistResponse', result.success ? result.data : result.error, !result.success);
+        }
+
+        async function getPlaylistById() {
+            const id = document.getElementById('getPlaylistId').value;
+            const result = await apiCall(`/playlists/${id}`);
+            showResponse('getPlaylistResponse', result.success ? result.data : result.error, !result.success);
+        }
+
+        async function deletePlaylist() {
+            const id = document.getElementById('deletePlaylistId').value;
+            const result = await apiCall(`/playlists/${id}`, 'DELETE');
+            showResponse('deletePlaylistResponse', result.success ? 'Playlist deleted successfully' : result.error, !result.success);
+        }
+
+        // Playback Functions
+        async function playSong() {
+            const songId = document.getElementById('playSongId').value;
+            
+            // First, get the song details
+            const songResult = await apiCall(`/songs/${songId}`);
+            if (!songResult.success) {
+                showResponse('playbackResponse', 'Song not found', true);
+                return;
+            }
+            
+            const song = songResult.data;
+            
+            // Update the backend playback state
+            const result = await apiCall(`/playback/play/${songId}`, 'POST');
+            showResponse('playbackResponse', result.success ? result.data : result.error, !result.success);
+            if (result.success) {
+                updatePlaybackDisplay(result.data);
+                
+                // Actually play the audio file from database BLOB
+                const audioPlayer = document.getElementById('audioPlayer');
+                // Use song ID to stream audio from database
+                audioPlayer.src = `${API_BASE}/files/audio/${songId}`;
+                
+                // Update now playing info
+                document.getElementById('nowPlayingTitle').textContent = song.title;
+                document.getElementById('nowPlayingArtist').textContent = `${song.artist} - ${song.album || 'Unknown Album'}`;
+                
+                // Update cover image if available from database
+                if (song.hasCoverImage) {
+                    const coverImg = document.getElementById('coverImage');
+                    coverImg.src = `${API_BASE}/files/cover/${songId}`;
+                    coverImg.style.display = 'block';
+                } else {
+                    document.getElementById('coverImage').style.display = 'none';
+                }
+                
+                // Play the audio
+                audioPlayer.play().catch(error => {
+                    showResponse('playbackResponse', 'Error playing audio: ' + error.message, true);
+                });
+            }
+        }
+
+        async function pausePlayback() {
+            const result = await apiCall('/playback/pause', 'POST');
+            showResponse('playbackResponse', result.success ? result.data : result.error, !result.success);
+            if (result.success) {
+                updatePlaybackDisplay(result.data);
+                
+                // Pause the actual audio
+                const audioPlayer = document.getElementById('audioPlayer');
+                audioPlayer.pause();
+            }
+        }
+
+        async function resumePlayback() {
+            const result = await apiCall('/playback/resume', 'POST');
+            showResponse('playbackResponse', result.success ? result.data : result.error, !result.success);
+            if (result.success) {
+                updatePlaybackDisplay(result.data);
+                
+                // Resume the actual audio
+                const audioPlayer = document.getElementById('audioPlayer');
+                audioPlayer.play().catch(error => {
+                    showResponse('playbackResponse', 'Error resuming audio: ' + error.message, true);
+                });
+            }
+        }
+
+        async function stopPlayback() {
+            const result = await apiCall('/playback/stop', 'POST');
+            showResponse('playbackResponse', result.success ? result.data : result.error, !result.success);
+            if (result.success) {
+                updatePlaybackDisplay(result.data);
+                
+                // Stop the actual audio
+                const audioPlayer = document.getElementById('audioPlayer');
+                audioPlayer.pause();
+                audioPlayer.currentTime = 0;
+                audioPlayer.src = '';
+                
+                // Clear now playing info
+                document.getElementById('nowPlayingTitle').textContent = 'No song playing';
+                document.getElementById('nowPlayingArtist').textContent = 'Select a song to play';
+                document.getElementById('coverImage').style.display = 'none';
+            }
+        }
+
+        async function getCurrentPlayback() {
+            const result = await apiCall('/playback/current');
+            showResponse('playbackResponse', result.success ? result.data : result.error, !result.success);
+            if (result.success) updatePlaybackDisplay(result.data);
+        }
+
+        function updatePlaybackDisplay(data) {
+            const container = document.getElementById('currentPlayback');
+            container.innerHTML = `
+                <p><strong>State:</strong> ${data.state}</p>
+                <p><strong>Current Song:</strong> ${data.currentSongTitle || 'None'}</p>
+                <p><strong>Artist:</strong> ${data.currentSongArtist || 'N/A'}</p>
+                <p><strong>Position:</strong> ${data.currentPosition} seconds</p>
+                <p><strong>Last Updated:</strong> ${new Date(data.lastUpdated).toLocaleString()}</p>
+            `;
+        }
+
+        // Admin Functions
+        async function uploadSong() {
+            const audioFile = document.getElementById('uploadAudioFile').files[0];
+            const coverImage = document.getElementById('uploadCoverImage').files[0];
+            
+            if (!audioFile) {
+                showResponse('uploadSongResponse', 'Please select an audio file', true);
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('title', document.getElementById('uploadSongTitle').value);
+            formData.append('artist', document.getElementById('uploadSongArtist').value);
+            formData.append('album', document.getElementById('uploadSongAlbum').value);
+            formData.append('genre', document.getElementById('uploadSongGenre').value);
+            formData.append('duration', document.getElementById('uploadSongDuration').value);
+            formData.append('audioFile', audioFile);
+            
+            if (coverImage) {
+                formData.append('coverImage', coverImage);
+            }
+
+            try {
+                const response = await fetch(API_BASE + '/songs/admin/upload', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showResponse('uploadSongResponse', data);
+                    // Clear form
+                    document.getElementById('uploadSongTitle').value = '';
+                    document.getElementById('uploadSongArtist').value = '';
+                    document.getElementById('uploadSongAlbum').value = '';
+                    document.getElementById('uploadAudioFile').value = '';
+                    document.getElementById('uploadCoverImage').value = '';
+                } else {
+                    showResponse('uploadSongResponse', data.message || 'Upload failed', true);
+                }
+            } catch (error) {
+                showResponse('uploadSongResponse', error.message, true);
+            }
+        }
+
+        async function addSong() {
+            const data = {
+                title: document.getElementById('adminSongTitle').value,
+                artist: document.getElementById('adminSongArtist').value,
+                album: document.getElementById('adminSongAlbum').value,
+                genre: document.getElementById('adminSongGenre').value,
+                duration: parseInt(document.getElementById('adminSongDuration').value),
+                filePath: document.getElementById('adminSongFilePath').value,
+                coverImagePath: document.getElementById('adminSongCoverImage').value
+            };
+
+            const result = await apiCall('/songs/admin', 'POST', data);
+            showResponse('addSongResponse', result.success ? result.data : result.error, !result.success);
+        }
+
+        async function updateSong() {
+            const id = document.getElementById('updateSongId').value;
+            const data = {
+                title: document.getElementById('updateSongTitle').value,
+                artist: document.getElementById('updateSongArtist').value
+            };
+
+            const result = await apiCall(`/songs/admin/${id}`, 'PUT', data);
+            showResponse('updateSongResponse', result.success ? result.data : result.error, !result.success);
+        }
+
+        async function deleteSong() {
+            const id = document.getElementById('deleteSongId').value;
+            const result = await apiCall(`/songs/admin/${id}`, 'DELETE');
+            showResponse('deleteSongResponse', result.success ? 'Song deleted successfully' : result.error, !result.success);
+        }
+
+        // Initialize
+        console.log('🎵 Music Streaming App Testing Interface Loaded');
+        console.log('API Base URL:', API_BASE);
+    </script>
+</body>
+</html>
