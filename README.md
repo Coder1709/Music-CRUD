@@ -1,19 +1,19 @@
-# 🎵 Music Streaming App Backend
+#  Music Streaming App Backend
 
 A comprehensive backend system for a music streaming application built with Java Spring Boot and PostgreSQL.
 
-## ✨ Features
+##  Features
 
-- **👤 User Management**: Registration, login, and profile management
-- **🎵 Song Management**: Add, search, and manage songs (admin functionality)
-- **📁 Playlist Management**: Create playlists, add/remove songs
-- **▶️ Playback Simulation**: Play, pause, resume, stop functionality
-- **🔐 JWT Authentication**: Secure API endpoints
-- **🛡️ Role-based Access Control**: Admin and User roles
-- **🔍 Advanced Search**: Search songs by title, artist, album, or genre
-- **📊 Sample Data**: Pre-loaded with 10 popular songs for testing
+- ** User Management**: Registration, login, and profile management
+- ** Song Management**: Add, search, and manage songs (admin functionality)
+- * Playlist Management**: Create playlists, add/remove songs
+-  Playback Simulation**: Play, pause, resume, stop functionality
+- ** JWT Authentication**: Secure API endpoints
+- ** Role-based Access Control**: Admin and User roles
+- ** Advanced Search**: Search songs by title, artist, album, or genre
+- ** Sample Data**: Pre-loaded with 10 popular songs for testing
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 - **Backend**: Java 17, Spring Boot 3.5.7
 - **Security**: Spring Security, JWT Authentication
@@ -268,7 +268,7 @@ The application uses the following main entities:
 - Role-based access control
 - CORS enabled for frontend integration
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Running with H2 Database (for testing)
 ```bash
@@ -290,7 +290,7 @@ createdb musicapp
 java -jar target/MusicApp-0.0.1-SNAPSHOT.jar
 ```
 
-## 📸 Screenshots & Testing
+##  Screenshots & Testing
 
 The application provides several ways to test and interact with the APIs:
 
@@ -336,7 +336,7 @@ curl -X POST http://localhost:8080/api/playback/play/1 \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-## 🎵 Sample Songs
+##  Sample Songs
 
 The application comes pre-loaded with 10 classic songs:
 1. Bohemian Rhapsody - Queen
@@ -350,7 +350,7 @@ The application comes pre-loaded with 10 classic songs:
 9. What'd I Say - Ray Charles
 10. Yesterday - The Beatles
 
-## 🔧 Development Notes
+##  Development Notes
 
 - **Auto-initialization**: Sample data created on startup
 - **JWT Expiration**: 24 hours (configurable)
@@ -359,7 +359,7 @@ The application comes pre-loaded with 10 classic songs:
 - **CORS**: Configured for frontend integration
 - **Logging**: Debug level enabled for development
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 src/main/java/com/arpit/MusicApp/
@@ -373,13 +373,4 @@ src/main/java/com/arpit/MusicApp/
 └── util/              # Utility Classes
 ```
 
-## 🎯 Assignment Requirements ✅
 
-- ✅ **User Management**: Registration, Login, Profile viewing
-- ✅ **Song Management**: List, search by title/artist/genre, admin add/edit/delete
-- ✅ **Playlist Management**: Create, add/remove songs, view user playlists
-- ✅ **Playback Simulation**: Play, pause, resume, stop with session tracking
-- ✅ **Tech Stack**: Java 8+, Spring Boot, PostgreSQL, REST APIs, JPA/Hibernate, Maven
-- ✅ **Security**: JWT authentication, role-based access control
-- ✅ **Documentation**: Complete API documentation and testing examples
-# Music-CRUD
